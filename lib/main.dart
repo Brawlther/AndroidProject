@@ -58,16 +58,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
   late TextEditingController _controllerLogin; //late - Constructor in initState()
   late TextEditingController _controllerPasswd;
-  String imageUrl = "";
-
-  var test = "test";
+  String imagePath = "";
+  //String imageUrl = "";
 
   @override //same as in java
   void initState() {
     super.initState(); //call the parent initState()
     _controllerLogin = TextEditingController(); //our late constructor
     _controllerPasswd = TextEditingController();
-    imageUrl = "https://cdn-icons-png.flaticon.com/512/5726/5726470.png";
+    //remote
+    //imageUrl = "https://cdn-icons-png.flaticon.com/512/5726/5726470.png";
+    //local
+    imagePath = "./images/question-mark.png";
   }
 
 
@@ -129,7 +131,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Image.network(imageUrl,width: 300, height: 300))
+                child: Image.asset(imagePath,width: 300, height: 300))
+              //child: Image.network(imageUrl,width: 300, height: 300))
           ],
         ),
       )
@@ -141,12 +144,18 @@ class _MyHomePageState extends State<MyHomePage> {
     var input = _controllerPasswd.value.text;
     if (input == "QWERTY123"){
       setState(() {
-        imageUrl = "https://cdn-icons-png.flaticon.com/512/566/566461.png";
+        // remote
+        // imageUrl = "https://cdn-icons-png.flaticon.com/512/566/566461.png";
+        // local
+        imagePath = "./images/idea.png";
       });
     }
     else{
       setState(() {
-        imageUrl = "https://cdn-icons-png.flaticon.com/512/3477/3477145.png";
+        // remote
+        // imageUrl = "https://cdn-icons-png.flaticon.com/512/3477/3477145.png";
+        // local
+        imagePath = "./images/stop.png";
       });
     }
   }
