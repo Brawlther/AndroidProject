@@ -59,8 +59,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String imageBasePath = "images/Week3";
   String imageSuffix = ".jpg";
-  final SizedBox mediumSizedBox = SizedBox(height: 20);
-  final SizedBox largeSizedBox = SizedBox(height: 40);
+  final SizedBox mediumSizedBox = const SizedBox(height: 20);
+  final SizedBox largeSizedBox = const SizedBox(height: 40);
 
   @override //same as in java
   void initState() {
