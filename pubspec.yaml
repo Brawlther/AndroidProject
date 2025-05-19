@@ -63,7 +63,17 @@ flutter:
 #2 spaces:
   assets:
 #4 spaces:
-    - images/algonquin.jpg
+    - assets/images/Week3/Beef.jpg
+    - assets/images/Week3/Chicken.jpg
+    - assets/images/Week3/Crockpot.jpg
+    - assets/images/Week3/MainDishes.jpg
+    - assets/images/Week3/Pork.jpg
+    - assets/images/Week3/SaladRecipes.jpg
+    - assets/images/Week3/Seafood.jpg
+    - assets/images/Week3/Icecream.jpg
+    - assets/images/Week3/Brownies.jpg
+    - assets/images/Week3/Pies.jpg
+    - assets/images/Week3/Cookies.jpg
 
   #   - images/a_dot_ham.jpeg
 
