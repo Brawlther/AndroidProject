@@ -111,19 +111,16 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               largeSizedBox,
               //Description
-              const Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                      "Not sure about exactly which recipe you're looking for? Do a search, or dive into our most popular categories.",
-                      style: TextStyle(fontSize: 20.0)
-                  ),
-                ],
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Not sure about exactly which recipe you're looking for? Do a search, or dive into our most popular categories.",
+                  style: TextStyle(fontSize: 20.0),
+                ),
               ),
               largeSizedBox,
               //Section 1
               Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
                     "BY MEAT",
@@ -144,7 +141,6 @@ class _MyHomePageState extends State<MyHomePage> {
               largeSizedBox,
               //Section 2
               Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
                     "BY COURSE",
@@ -152,7 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   mediumSizedBox,
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       TextedImageBottom(label:"Main Dishes", imageFileName:"$imageBasePath/MainDishes$imageSuffix"),
                       TextedImageBottom(label:"Salad Recipes", imageFileName:"$imageBasePath/SaladRecipes$imageSuffix"),
@@ -165,7 +161,6 @@ class _MyHomePageState extends State<MyHomePage> {
               largeSizedBox,
               //Section 3
               Column(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
                     "BY DESSERT",
@@ -173,9 +168,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   mediumSizedBox,
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      TextedImageBottom(label:"Icecream", imageFileName:"$imageBasePath/Icecream$imageSuffix"),
+                      TextedImageBottom(label:"Ice Cream", imageFileName:"$imageBasePath/IceCream$imageSuffix"),
                       TextedImageBottom(label:"Brownies", imageFileName:"$imageBasePath/Brownies$imageSuffix"),
                       TextedImageBottom(label:"Pies", imageFileName:"$imageBasePath/Pies$imageSuffix"),
                       TextedImageBottom(label:"Cookies", imageFileName:"$imageBasePath/Cookies$imageSuffix"),
@@ -187,7 +182,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-
     );
   }
 }
