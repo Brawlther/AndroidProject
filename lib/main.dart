@@ -130,10 +130,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      TextedImageFlow(imageFileName: "$imageBasePath/Beef$imageSuffix",label:"Beef"),
-                      TextedImageFlow(imageFileName: "$imageBasePath/Chicken$imageSuffix",label:"Chicken"),
-                      TextedImageFlow(imageFileName: "$imageBasePath/Pork$imageSuffix",label:"Pork"),
-                      TextedImageFlow(imageFileName: "$imageBasePath/Seafood$imageSuffix",label:"Seafood")
+                      TextedImageFlow(imageFileName: getImagePath("Beef"),label:"Beef"),
+                      TextedImageFlow(imageFileName: getImagePath("Chicken"),label:"Chicken"),
+                      TextedImageFlow(imageFileName: getImagePath("Pork"),label:"Pork"),
+                      TextedImageFlow(imageFileName: getImagePath("Seafood"),label:"Seafood")
                     ],
                   )
                 ],
@@ -150,10 +150,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      TextedImageBottom(label:"Main Dishes", imageFileName:"$imageBasePath/MainDishes$imageSuffix"),
-                      TextedImageBottom(label:"Salad Recipes", imageFileName:"$imageBasePath/SaladRecipes$imageSuffix"),
-                      TextedImageBottom(label:"Side Dishes", imageFileName:"$imageBasePath/SideDishes$imageSuffix"),
-                      TextedImageBottom(label:"Crockpot", imageFileName:"$imageBasePath/Crockpot$imageSuffix"),
+                      TextedImageBottom(label:"Main Dishes", imageFileName:getImagePath("MainDishes")),
+                      TextedImageBottom(label:"Salad Recipes", imageFileName:getImagePath("SaladRecipes")),
+                      TextedImageBottom(label:"Side Dishes", imageFileName:getImagePath("SideDishes")),
+                      TextedImageBottom(label:"Crockpot", imageFileName:getImagePath("Crockpot"))
                     ],
                   )
                 ],
@@ -170,10 +170,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      TextedImageBottom(label:"Ice Cream", imageFileName:"$imageBasePath/IceCream$imageSuffix"),
-                      TextedImageBottom(label:"Brownies", imageFileName:"$imageBasePath/Brownies$imageSuffix"),
-                      TextedImageBottom(label:"Pies", imageFileName:"$imageBasePath/Pies$imageSuffix"),
-                      TextedImageBottom(label:"Cookies", imageFileName:"$imageBasePath/Cookies$imageSuffix"),
+                      TextedImageBottom(label:"Ice Cream", imageFileName:getImagePath("IceCream")),
+                      TextedImageBottom(label:"Brownies", imageFileName:getImagePath("Brownies")),
+                      TextedImageBottom(label:"Pies", imageFileName:getImagePath("Pies")),
+                      TextedImageBottom(label:"Cookies", imageFileName:getImagePath("Cookies"))
                     ],
                   )
                 ],
@@ -183,5 +183,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+  String getImagePath(String imageName){
+    return "$imageBasePath/$imageName$imageSuffix";
   }
 }
