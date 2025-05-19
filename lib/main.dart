@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'components/TextedImage_Bottom.dart';
+import 'components/TextedImage_Flow.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -123,94 +126,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Stack(
-                          alignment: AlignmentDirectional.center,
-                          children: <Widget>[
-                            CircleAvatar(
-                                backgroundImage: AssetImage("$imageBasePath/Beef$imageSuffix"),
-                                radius:80
-                            ),
-                            Text(
-                              "BEEF",
-                              style: TextStyle(
-                                  fontSize: 36.0,
-                                  color:Colors.white,
-                                  shadows:[
-                                    Shadow(
-                                      offset: Offset(1.0, 1.0), // X and Y offset
-                                      blurRadius: 4.5,          // how blurry
-                                      color: Colors.black,      // shadow color
-                                    ),
-                                  ],
-                                  backgroundColor:Colors.transparent
-                              ),
-                            )]),
-                      Stack(
-                          alignment: AlignmentDirectional.center,
-                          children: <Widget>[
-                            CircleAvatar(
-                                backgroundImage: AssetImage("$imageBasePath/Chicken$imageSuffix"),
-                                radius:80
-                            ),
-                            Text(
-                              "CHICKEN",
-                              style: TextStyle(
-                                  fontSize: 36.0,
-                                  color:Colors.white,
-                                  shadows:[
-                                    Shadow(
-                                      offset: Offset(1.0, 1.0), // X and Y offset
-                                      blurRadius: 4.5,          // how blurry
-                                      color: Colors.black,      // shadow color
-                                    ),
-                                  ],
-                                  backgroundColor:Colors.transparent
-                              ),
-                            )]),
-                      Stack(
-                          alignment: AlignmentDirectional.center,
-                          children: <Widget>[
-                            CircleAvatar(
-                                backgroundImage: AssetImage("$imageBasePath/Pork$imageSuffix"),
-                                radius:80
-                            ),
-                            Text(
-                              "PORK",
-                              style: TextStyle(
-                                  fontSize: 36.0,
-                                  color:Colors.white,
-                                  shadows:[
-                                    Shadow(
-                                      offset: Offset(1.0, 1.0), // X and Y offset
-                                      blurRadius: 4.5,          // how blurry
-                                      color: Colors.black,      // shadow color
-                                    ),
-                                  ],
-                                  backgroundColor:Colors.transparent
-                              ),
-                            )]),
-                      Stack(
-                          alignment: AlignmentDirectional.center,
-                          children: <Widget>[
-                            CircleAvatar(
-                                backgroundImage: AssetImage("$imageBasePath/Seafood$imageSuffix"),
-                                radius:80
-                            ),
-                            Text(
-                              "SEAFOOD",
-                              style: TextStyle(
-                                  fontSize: 36.0,
-                                  color:Colors.white,
-                                  shadows:[
-                                    Shadow(
-                                      offset: Offset(1.0, 1.0), // X and Y offset
-                                      blurRadius: 4.5,          // how blurry
-                                      color: Colors.black,      // shadow color
-                                    ),
-                                  ],
-                                  backgroundColor:Colors.transparent
-                              ),
-                            )]),
+                      TextedImageFlow(imageFileName: "$imageBasePath/Beef$imageSuffix",label:"Beef"),
+                      TextedImageFlow(imageFileName: "$imageBasePath/Chicken$imageSuffix",label:"Chicken"),
+                      TextedImageFlow(imageFileName: "$imageBasePath/Pork$imageSuffix",label:"Pork"),
+                      TextedImageFlow(imageFileName: "$imageBasePath/Seafood$imageSuffix",label:"Seafood")
                     ],
                   )
                 ],
@@ -225,50 +144,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Column(mainAxisAlignment: MainAxisAlignment.center,
-                          children:[
-                            CircleAvatar(
-                                backgroundImage: AssetImage("$imageBasePath/MainDishes$imageSuffix"),
-                                radius:80
-                            ),
-                            Text(
-                                "Main Dishes",
-                                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)
-                            ),
-                          ]),
-                      Column(mainAxisAlignment: MainAxisAlignment.center,
-                          children:[
-                            CircleAvatar(
-                                backgroundImage: AssetImage("$imageBasePath/SaladRecipes$imageSuffix"),
-                                radius:80
-                            ),
-                            Text(
-                                "Salad Recipes",
-                                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)
-                            ),
-                          ]),
-                      Column(mainAxisAlignment: MainAxisAlignment.center,
-                          children:[
-                            CircleAvatar(
-                                backgroundImage: AssetImage("$imageBasePath/SideDishes$imageSuffix"),
-                                radius:80
-                            ),
-                            Text(
-                                "Crockpot",
-                                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)
-                            ),
-                          ]),
-                      Column(mainAxisAlignment: MainAxisAlignment.center,
-                          children:[
-                            CircleAvatar(
-                                backgroundImage: AssetImage("$imageBasePath/Crockpot$imageSuffix"),
-                                radius:80
-                            ),
-                            Text(
-                                "Crockpot",
-                                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)
-                            ),
-                          ])
+                      TextedImageBottom(label:"Main Dishes", imageFileName:"$imageBasePath/MainDishes$imageSuffix"),
+                      TextedImageBottom(label:"Salad Recipes", imageFileName:"$imageBasePath/SaladRecipes$imageSuffix"),
+                      TextedImageBottom(label:"Side Dishes", imageFileName:"$imageBasePath/SideDishes$imageSuffix"),
+                      TextedImageBottom(label:"Crockpot", imageFileName:"$imageBasePath/Crockpot$imageSuffix"),
                     ],
                   )
                 ],
@@ -283,50 +162,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Column(mainAxisAlignment: MainAxisAlignment.center,
-                          children:[
-                            CircleAvatar(
-                                backgroundImage: AssetImage("$imageBasePath/Icecream$imageSuffix"),
-                                radius:80
-                            ),
-                            Text(
-                                "Ice Cream",
-                                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)
-                            ),
-                          ]),
-                      Column(mainAxisAlignment: MainAxisAlignment.center,
-                          children:[
-                            CircleAvatar(
-                                backgroundImage: AssetImage("$imageBasePath/Brownies$imageSuffix"),
-                                radius:80
-                            ),
-                            Text(
-                                "Brownies",
-                                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)
-                            ),
-                          ]),
-                      Column(mainAxisAlignment: MainAxisAlignment.center,
-                          children:[
-                            CircleAvatar(
-                                backgroundImage: AssetImage("$imageBasePath/Pies$imageSuffix"),
-                                radius:80
-                            ),
-                            Text(
-                                "Pies",
-                                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)
-                            ),
-                          ]),
-                      Column(mainAxisAlignment: MainAxisAlignment.center,
-                          children:[
-                            CircleAvatar(
-                                backgroundImage: AssetImage("$imageBasePath/Cookies$imageSuffix"),
-                                radius:80
-                            ),
-                            Text(
-                                "Coockies",
-                                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)
-                            ),
-                          ])
+                      TextedImageBottom(label:"Icecream", imageFileName:"$imageBasePath/Icecream$imageSuffix"),
+                      TextedImageBottom(label:"Brownies", imageFileName:"$imageBasePath/Brownies$imageSuffix"),
+                      TextedImageBottom(label:"Pies", imageFileName:"$imageBasePath/Pies$imageSuffix"),
+                      TextedImageBottom(label:"Cookies", imageFileName:"$imageBasePath/Cookies$imageSuffix"),
                     ],
                   )
                 ],
