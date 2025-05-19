@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 import 'TextedImage.dart';
 
 class TextedImageBottom extends TextedImage  {
-  final String label;
-  final String imageFileName;
-
+  static SizedBox smallSizedBox = const SizedBox(height:10);
   const TextedImageBottom({super.key,
-    required this.label,
-    required this.imageFileName,
-  }): super(label: label,imageFileName: imageFileName);
+    required super.label,
+    required super.imageFileName,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +15,12 @@ class TextedImageBottom extends TextedImage  {
         children:[
           CircleAvatar(
               backgroundImage: AssetImage(imageFileName),
-              radius:80
+              radius:TextedImage.imageSize
           ),
+          smallSizedBox,
           Text(
               label,
-              style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)
+              style: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold)
           ),
         ]);
   }

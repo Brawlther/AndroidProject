@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'components/TextedImage_Bottom.dart';
 import 'components/TextedImage_Flow.dart';
 
@@ -60,6 +59,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String imageBasePath = "images/Week3";
   String imageSuffix = ".jpg";
+  final SizedBox mediumSizedBox = SizedBox(height: 20);
+  final SizedBox largeSizedBox = SizedBox(height: 40);
 
   @override //same as in java
   void initState() {
@@ -98,7 +99,8 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
+              //Title
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
@@ -107,7 +109,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               ),
-              Column(
+              largeSizedBox,
+              //Description
+              const Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
@@ -116,13 +120,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               ),
+              largeSizedBox,
+              //Section 1
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     "BY MEAT",
                     style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
                   ),
+                  mediumSizedBox,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -134,13 +141,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   )
                 ],
               ),
+              largeSizedBox,
+              //Section 2
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     "BY COURSE",
                     style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
                   ),
+                  mediumSizedBox,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -152,13 +162,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   )
                 ],
               ),
+              largeSizedBox,
+              //Section 3
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     "BY DESSERT",
                     style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
                   ),
+                  mediumSizedBox,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [

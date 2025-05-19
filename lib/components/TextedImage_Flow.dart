@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'TextedImage.dart';
 
 class TextedImageFlow extends TextedImage  {
-  final String label;
-  final String imageFileName;
-
   const TextedImageFlow({super.key,
-    required this.label,
-    required this.imageFileName,
-  }) : super(label: label,imageFileName: imageFileName);
+    required super.label,
+    required super.imageFileName,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +16,7 @@ class TextedImageFlow extends TextedImage  {
             children: <Widget>[
               CircleAvatar(
                   backgroundImage: AssetImage(imageFileName),
-                  radius:80
+                  radius:TextedImage.imageSize
               ),
               Text(
                 label,
