@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -55,21 +56,50 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
+  //cache object
+  late SharedPreferences sharedPreferences;
   late TextEditingController _controllerLogin; //late - Constructor in initState()
   late TextEditingController _controllerPasswd;
   String imagePath = "";
-  //String imageUrl = "";
 
   @override //same as in java
   void initState() {
     super.initState(); //call the parent initState()
     _controllerLogin = TextEditingController(); //our late constructor
     _controllerPasswd = TextEditingController();
-    //remote
-    //imageUrl = "https://cdn-icons-png.flaticon.com/512/5726/5726470.png";
+    //Initialize the app
+    _initializeApp();
     //local
     imagePath = "./images/question-mark.png";
+  }
+  //Initialize the application
+  void _initializeApp() async {
+    //Get the singleton access from SharedPreferences
+    sharedPreferences = await SharedPreferences.getInstance();
+    //Initialize TextFields with loaded cache information (if not empty)
+    _loadSavedLogin();
+  }
+  //Load username and password from cache
+  void _loadSavedLogin(){
+    final retrievedUsername = getSharedPreferencesByKey("loginName"); //username
+    final retrievedPasswd = getSharedPreferencesByKey("loginPasswd"); //password
+    if(retrievedUsername != "" || retrievedPasswd !=""){
+      //Initialize the SnackBar
+      var snackBar = const SnackBar( content: Text("Account retrieval success.") );
+      //update loaded information to the TextFields
+      setState((){
+        _controllerLogin.text = retrievedUsername;
+        _controllerPasswd.text = retrievedPasswd;
+        ScaffoldMessenger.of(context).showSnackBar(snackBar); //Show the SnackBar to notice user
+      });
+    }
+  }
+
+  String getSharedPreferencesByKey(key){
+    if (sharedPreferences.containsKey(key)){
+      return sharedPreferences.getString(key)!;
+    }
+    return "";
   }
 
 
@@ -141,22 +171,59 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //this runs when you click the button
   void buttonClicked(){
-    var input = _controllerPasswd.value.text;
-    if (input == "QWERTY123"){
+    var inputUsername = _controllerLogin.value.text;
+    var inputPasswd = _controllerPasswd.value.text;
+    if (inputPasswd == "QWERTY123"){
       setState(() {
-        // remote
-        // imageUrl = "https://cdn-icons-png.flaticon.com/512/566/566461.png";
         // local
         imagePath = "./images/idea.png";
       });
     }
     else{
       setState(() {
-        // remote
-        // imageUrl = "https://cdn-icons-png.flaticon.com/512/3477/3477145.png";
         // local
         imagePath = "./images/stop.png";
       });
     }
+    //Popup for saving / clearing account information
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Almost There', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+        content: const Text('Remember your account?', style: TextStyle(fontSize: 18),textAlign: TextAlign.center),
+        actions: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              //Save Button
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, '');
+                  saveLoginInfo(inputUsername,inputPasswd); //save event
+                },
+                child: const Text('Yes'),
+              ),
+              //Clear Button
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, '');
+                  clearLoginInfo(); //clear event
+                },
+                child: const Text('No'),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  void saveLoginInfo(inputUsername, inputPasswd) {
+    sharedPreferences.setString("loginName", inputUsername);
+    sharedPreferences.setString("loginPasswd", inputPasswd);
+  }
+  void clearLoginInfo() {
+    sharedPreferences.remove("loginName");
+    sharedPreferences.remove("loginPasswd");
   }
 }
