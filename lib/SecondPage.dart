@@ -1,5 +1,4 @@
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_cst2335_labs/DataRepository.dart';
 
@@ -27,6 +26,7 @@ class _SecondPageState extends State<SecondPage> {
   void _initializeApp() async {
     ePrefs = EncryptedSharedPreferences();
     loginName = DataRepository.loginName;
+    _loadSavedLogin();
   }
 
   @override
@@ -124,4 +124,23 @@ class _SecondPageState extends State<SecondPage> {
         ])
     ); //Use a Scaffold to layout a page with an AppBar and main body region
   }
-}
+
+  void _loadSavedLogin() async{
+    final firstName = await getEncryptedSharedPreferencesByKey("firstName"); //firstName
+    final lastName = await getEncryptedSharedPreferencesByKey("lastName"); //lastName
+    final phone = await getEncryptedSharedPreferencesByKey("phone"); //phone
+    final email = await getEncryptedSharedPreferencesByKey("email"); //email
+    //update loaded information to the TextFields
+    setState((){
+      _firstNameController.text = firstName;
+      _lastNameController.text = lastName;
+      _phoneController.text = phone;
+      _emailController.text = email;
+    });
+    }
+
+    Future<String> getEncryptedSharedPreferencesByKey(key) async {
+      String value = await ePrefs.getString(key);
+      return value;
+    }
+  }
