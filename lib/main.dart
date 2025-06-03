@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:my_cst2335_labs/SecondPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'DataRepository.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,22 +16,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      initialRoute: '/',
+      routes: {
+        '/secondPage': (context) => const SecondPage(),
+      },
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
@@ -60,6 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
   late SharedPreferences sharedPreferences;
   late TextEditingController _controllerLogin; //late - Constructor in initState()
   late TextEditingController _controllerPasswd;
+  bool loginSuccess = false;
   String imagePath = "";
 
   @override //same as in java
@@ -178,6 +171,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // local
         imagePath = "./images/idea.png";
       });
+      loginSuccess = true;
     }
     else{
       setState(() {
@@ -199,7 +193,9 @@ class _MyHomePageState extends State<MyHomePage> {
               TextButton(
                 onPressed: () {
                   Navigator.pop(context, '');
+                  DataRepository.loginName = inputUsername;
                   saveLoginInfo(inputUsername,inputPasswd); //save event
+                  tryJumpPage();
                 },
                 child: const Text('Yes'),
               ),
@@ -207,7 +203,9 @@ class _MyHomePageState extends State<MyHomePage> {
               TextButton(
                 onPressed: () {
                   Navigator.pop(context, '');
+                  DataRepository.loginName = inputUsername;
                   clearLoginInfo(); //clear event
+                  tryJumpPage();
                 },
                 child: const Text('No'),
               ),
@@ -216,6 +214,12 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
     );
+  }
+
+  void tryJumpPage(){
+    if(loginSuccess){
+      Navigator.pushNamed(  context,"/secondPage" );
+    }
   }
 
   void saveLoginInfo(inputUsername, inputPasswd) {
