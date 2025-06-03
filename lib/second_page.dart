@@ -1,6 +1,7 @@
 import 'package:encrypted_shared_preferences/encrypted_shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:my_cst2335_labs/DataRepository.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SecondPage extends StatefulWidget {
   const SecondPage({super.key});
@@ -26,7 +27,7 @@ class _SecondPageState extends State<SecondPage> {
   void _initializeApp() async {
     ePrefs = EncryptedSharedPreferences();
     loginName = DataRepository.loginName;
-    _loadSavedLogin();
+    loadData();
   }
 
   @override
@@ -40,6 +41,18 @@ class _SecondPageState extends State<SecondPage> {
 
   @override
   Widget build(BuildContext context) {
+    void checkLaunchURLSupport(Uri uri) async{
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri);
+      }
+      else {
+        var snackBar = SnackBar(content: Text("${uri.scheme} is not supported on this device"));
+        setState((){
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        });
+      }
+    }
+
     return Scaffold(appBar:AppBar(
       // TRY THIS: Try changing the color here to a specific color (to
       // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
@@ -52,7 +65,7 @@ class _SecondPageState extends State<SecondPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         spacing: 15,
         children: <Widget>[
-          Text(style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),"Welcome Back $loginName"),
+          Text(style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),"Welcome Back $loginName"),
           TextField(
             controller: _firstNameController,
             decoration: const InputDecoration(
@@ -60,7 +73,7 @@ class _SecondPageState extends State<SecondPage> {
               border: OutlineInputBorder()
             ),
             onChanged: (value) async {
-              await ePrefs.setString("firstName", value);
+              saveData("firstName", value);
             }
           ),
           TextField(
@@ -70,7 +83,7 @@ class _SecondPageState extends State<SecondPage> {
               border: OutlineInputBorder()
             ),
             onChanged: (value) async {
-              await ePrefs.setString("lastName", value);
+              saveData("lastName", value);
             }
           ),
           Row(
@@ -83,19 +96,27 @@ class _SecondPageState extends State<SecondPage> {
                       border: OutlineInputBorder()
                     ),
                     onChanged: (value) async {
-                      await ePrefs.setString("phone", value);
+                      saveData("phone", value);
                     }
                   )),
               IconButton(
                 icon: const Icon(Icons.phone),
                 onPressed: () {
-                  // Handle phone icon tap if needed
+                  final phoneURI = Uri(scheme: 'tel', path: _phoneController.text);
+                  checkLaunchURLSupport(phoneURI);
                 },
               ),
               IconButton(
                 icon: const Icon(Icons.message),
                 onPressed: () {
-                  // Handle phone icon tap if needed
+                  final messageURI = Uri(
+                      scheme: 'sms',
+                      path: _phoneController.text,
+                      queryParameters: <String, String>{
+                        'body': 'Hello, ${_firstNameController.text}!'
+                      }
+                  );
+                  checkLaunchURLSupport(messageURI);
                 },
               ),
             ],
@@ -110,13 +131,21 @@ class _SecondPageState extends State<SecondPage> {
                       border: OutlineInputBorder()
                     ),
                     onChanged: (value) async {
-                      await ePrefs.setString("email", value);
+                      saveData("email", value);
                     }
                   )),
               IconButton(
                 icon: const Icon(Icons.mail),
                 onPressed: () {
-                  // Handle phone icon tap if needed
+                  final emailURI = Uri(
+                      scheme: 'mailto',
+                      path: _emailController.text,
+                      queryParameters: {
+                        'subject': 'Greeting',
+                        'body': 'Hello, ${_firstNameController.text}!'
+                      }
+                  );
+                  checkLaunchURLSupport(emailURI);
                 },
               )
             ],
@@ -125,7 +154,7 @@ class _SecondPageState extends State<SecondPage> {
     ); //Use a Scaffold to layout a page with an AppBar and main body region
   }
 
-  void _loadSavedLogin() async{
+  void loadData() async{
     final firstName = await getEncryptedSharedPreferencesByKey("firstName"); //firstName
     final lastName = await getEncryptedSharedPreferencesByKey("lastName"); //lastName
     final phone = await getEncryptedSharedPreferencesByKey("phone"); //phone
@@ -137,10 +166,14 @@ class _SecondPageState extends State<SecondPage> {
       _phoneController.text = phone;
       _emailController.text = email;
     });
-    }
-
-    Future<String> getEncryptedSharedPreferencesByKey(key) async {
-      String value = await ePrefs.getString(key);
-      return value;
-    }
   }
+
+  Future<String> getEncryptedSharedPreferencesByKey(key) async {
+    String value = await ePrefs.getString(key);
+    return value;
+  }
+
+  void saveData(String key, String value) async{
+    await ePrefs.setString(key, value);
+  }
+}

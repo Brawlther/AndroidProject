@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_cst2335_labs/SecondPage.dart';
+import 'package:my_cst2335_labs/second_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'DataRepository.dart';
