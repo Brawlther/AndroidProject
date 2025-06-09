@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'InputItemRow.dart';
+import 'Item.dart';
+import 'MyListView.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -56,18 +60,19 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  late TextEditingController _controllerLogin; //late - Constructor in initState()
-  late TextEditingController _controllerPasswd;
-  String imageUrl = "";
+  late TextEditingController _controllerName; //late - Constructor in initState()
+  late TextEditingController _controllerQuantity;
+
+  late List<Item> items;
 
   var test = "test";
 
   @override //same as in java
   void initState() {
     super.initState(); //call the parent initState()
-    _controllerLogin = TextEditingController(); //our late constructor
-    _controllerPasswd = TextEditingController();
-    imageUrl = "https://cdn-icons-png.flaticon.com/512/5726/5726470.png";
+    _controllerName = TextEditingController(); //our late constructor
+    _controllerQuantity = TextEditingController();
+    items = [];
   }
 
 
@@ -75,7 +80,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void dispose()
   {
     super.dispose();
-    _controllerLogin.dispose();    // clean up memory
+    _controllerName.dispose();
+    _controllerQuantity.dispose();// clean up memory
   }
 
   @override
@@ -100,54 +106,33 @@ class _MyHomePageState extends State<MyHomePage> {
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            TextField(controller: _controllerLogin,
-               decoration: const InputDecoration(
-                labelText:"Login",
-                border: OutlineInputBorder(),
+              const SizedBox(height: 15),
+              //First Row - Encapsulated as a component
+              InputItemRow(
+                controller_01: _controllerName,
+                controller_02: _controllerQuantity,
+                callback: () {
+                  setState(() {
+                    addItem(
+                      _controllerName.text.trim(),
+                      _controllerQuantity.text.trim(),
+                      );
+                  });}
               ),
-            ),
-            TextField(controller: _controllerPasswd,
-              obscureText: true,
-              obscuringCharacter: "*",
-              decoration: const InputDecoration(
-                labelText:"Password",
-                border: OutlineInputBorder(),
+              const SizedBox(height: 15),
+              //List View - Encapsulated as a component
+              Expanded(
+                child: MyListView(list: items)
               ),
-            ),
-            ElevatedButton(
-                style:ElevatedButton.styleFrom(
-                  textStyle: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold
-                  ),
-                  minimumSize: const Size(100,60),
-                  foregroundColor: Colors.blue
-                ),onPressed: buttonClicked,
-                child: const Text("Login")
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Image.network(imageUrl,width: 300, height: 300))
           ],
         ),
       )
     );
   }
 
-  //this runs when you click the button
-  void buttonClicked(){
-    var input = _controllerPasswd.value.text;
-    if (input == "QWERTY123"){
-      setState(() {
-        imageUrl = "https://cdn-icons-png.flaticon.com/512/566/566461.png";
-      });
-    }
-    else{
-      setState(() {
-        imageUrl = "https://cdn-icons-png.flaticon.com/512/3477/3477145.png";
-      });
-    }
+  void addItem(String itemName, String itemQuantity){
+    items.add(Item(itemName, int.parse(itemQuantity)));
   }
 }
