@@ -2,9 +2,12 @@ import 'package:flutter/widgets.dart';
 
 class MyListView<T> extends StatelessWidget{
   final List<T> list;
+  final void Function(int index) onLongPressItem;
+
   const MyListView({
     super.key,
-    required this.list
+    required this.list,
+    required this.onLongPressItem
   });
 
   @override
@@ -14,13 +17,15 @@ class MyListView<T> extends StatelessWidget{
       itemBuilder: (context, index) {
         final item = list[index];
         return Center(
-            child: Text(
-              "${index + 1}: $item",
-              style: const TextStyle(fontSize: 18),
+            child: GestureDetector(
+              onLongPress: () => {onLongPressItem(index)},
+              child: Text(
+                "${index + 1}: $item",
+                style: const TextStyle(fontSize: 18),
+              ),
             )
         );
       },
     );
   }
-
 }

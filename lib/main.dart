@@ -126,7 +126,11 @@ class _MyHomePageState extends State<MyHomePage> {
               const SizedBox(height: 15),
               //List View - Encapsulated as a component
               Expanded(
-                child: MyListView(list: items)
+                child: MyListView(list: items, onLongPressItem: (index) => {
+                  setState(() {
+                    removeItem(index);
+                  })
+                })
               ),
           ],
         ),
@@ -137,8 +141,13 @@ class _MyHomePageState extends State<MyHomePage> {
   void addItem(String itemName, String itemQuantity){
     items.add(Item(itemName, int.parse(itemQuantity)));
   }
+
   void clearTextFields(){
     _controllerName.text = "";
     _controllerQuantity.text = "";
+  }
+
+  void removeItem(int index){
+    items.removeAt(index);
   }
 }
