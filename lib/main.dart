@@ -148,6 +148,36 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void removeItem(int index){
-    items.removeAt(index);
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Delete Item', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+        content: const Text('Remove this item?', style: TextStyle(fontSize: 18),textAlign: TextAlign.center),
+        actions: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              //Yes
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, '');
+                  setState(() {
+                    items.removeAt(index);
+                  });
+                },
+                child: const Text('Yes'),
+              ),
+              //No
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, '');
+                },
+                child: const Text('No'),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
   }
 }
