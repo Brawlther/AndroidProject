@@ -118,7 +118,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     addItem(
                       _controllerName.text.trim(),
                       _controllerQuantity.text.trim(),
-                      );
+                    );
+                    //Clear the TextFields
+                    clearTextFields();
                   });}
               ),
               const SizedBox(height: 15),
@@ -134,5 +136,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void addItem(String itemName, String itemQuantity){
     items.add(Item(itemName, int.parse(itemQuantity)));
+  }
+  void clearTextFields(){
+    _controllerName.text = "";
+    _controllerQuantity.text = "";
   }
 }
