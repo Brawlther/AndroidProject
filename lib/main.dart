@@ -65,8 +65,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   late List<Item> items;
 
-  var test = "test";
-
   @override //same as in java
   void initState() {
     super.initState(); //call the parent initState()
