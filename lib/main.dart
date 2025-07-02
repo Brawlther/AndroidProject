@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-
+import 'Database.dart';
 import 'InputItemRow.dart';
-import 'Item.dart';
+import 'ToDoItem.dart';
 import 'MyListView.dart';
 
 void main() {
@@ -61,25 +61,26 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
 
   late TextEditingController _controllerName; //late - Constructor in initState()
-  late TextEditingController _controllerQuantity;
-
-  late List<Item> items;
+  late final AppDatabase database;
+  List<ToDoItem> items = [];
 
   @override //same as in java
-  void initState() {
+  initState() {
     super.initState(); //call the parent initState()
     _controllerName = TextEditingController(); //our late constructor
-    _controllerQuantity = TextEditingController();
-    items = [];
+    _initAsync();
   }
 
+  Future<void> _initAsync() async {
+    database = await initDatabase();
+    updateListView();
+  }
 
   @override
   void dispose()
   {
     super.dispose();
     _controllerName.dispose();
-    _controllerQuantity.dispose();// clean up memory
   }
 
   @override
@@ -110,25 +111,18 @@ class _MyHomePageState extends State<MyHomePage> {
               //First Row - Encapsulated as a component
               InputItemRow(
                 controller_01: _controllerName,
-                controller_02: _controllerQuantity,
-                callback: () {
-                  setState(() {
+                callback: () async {
                     addItem(
-                      _controllerName.text.trim(),
-                      _controllerQuantity.text.trim(),
+                      null,
+                      _controllerName.text.trim()
                     );
                     //Clear the TextFields
                     clearTextFields();
-                  });}
-              ),
+                  }),
               const SizedBox(height: 15),
               //List View - Encapsulated as a component
               Expanded(
-                child: MyListView(list: items, onLongPressItem: (index) => {
-                  setState(() {
-                    removeItem(index);
-                  })
-                })
+                child: MyListView(list: items, onLongPressItem: (index) => removeItem(index))
               ),
           ],
         ),
@@ -136,13 +130,26 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void addItem(String itemName, String itemQuantity){
-    items.add(Item(itemName, int.parse(itemQuantity)));
+  Future<AppDatabase> initDatabase() async {
+    return await $FloorAppDatabase.databaseBuilder('week8lab_database.db').build();
+  }
+
+  Future<void> addItem(int? itemId, String itemName) async {
+    await database.itemDao.insertItem(ToDoItem(itemId, itemName));
+    updateListView();
+  }
+
+  void updateListView() async {
+    //fetch updated item list from the database
+    final fetchedItems = await database.itemDao.findAllItems();
+    setState(() {
+      //re-render the item list
+      items = fetchedItems;
+    });
   }
 
   void clearTextFields(){
     _controllerName.text = "";
-    _controllerQuantity.text = "";
   }
 
   void removeItem(int index){
@@ -157,11 +164,11 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               //Yes
               TextButton(
-                onPressed: () {
+                onPressed: () async {
                   Navigator.pop(context, '');
-                  setState(() {
-                    items.removeAt(index);
-                  });
+                  //delete item
+                  await database.itemDao.deleteItem(items[index]);
+                  updateListView();
                 },
                 child: const Text('Yes'),
               ),
