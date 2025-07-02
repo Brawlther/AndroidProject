@@ -142,11 +142,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void updateListView() async {
     //fetch updated item list from the database
-    final fetchedItems = await database.itemDao.findAllItems();
-    setState(() {
-      //re-render the item list
-      items = fetchedItems;
-    });
+    database.itemDao.findAllItems().then(
+        (fetchedItems){
+          setState(() {
+            //re-render the item list
+            items = fetchedItems;
+          });
+        }
+    );
   }
 
   void clearTextFields(){
