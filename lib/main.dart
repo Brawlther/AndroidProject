@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'Database.dart';
+import 'InputItemRow.dart';
+import 'ToDoItem.dart';
+import 'MyListView.dart';
 
 void main() {
   runApp(const MyApp());
@@ -55,29 +59,29 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late TextEditingController _controllerName; //late - Constructor in initState()
+  late final AppDatabase database;
+  List<ToDoItem> items = [];
 
-  late TextEditingController _controllerLogin; //late - Constructor in initState()
-  late TextEditingController _controllerPasswd;
-  String imagePath = "";
-  //String imageUrl = "";
 
   @override //same as in java
-  void initState() {
+  initState() {
     super.initState(); //call the parent initState()
-    _controllerLogin = TextEditingController(); //our late constructor
-    _controllerPasswd = TextEditingController();
-    //remote
-    //imageUrl = "https://cdn-icons-png.flaticon.com/512/5726/5726470.png";
-    //local
-    imagePath = "./images/question-mark.png";
+    _controllerName = TextEditingController(); //our late constructor
+    _initAsync();
+
   }
 
+  Future<void> _initAsync() async {
+    database = await initDatabase();
+    updateListView();
+  }
 
   @override
   void dispose()
   {
     super.dispose();
-    _controllerLogin.dispose();    // clean up memory
+    _controllerName.dispose();
   }
 
   @override
@@ -102,61 +106,84 @@ class _MyHomePageState extends State<MyHomePage> {
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            TextField(controller: _controllerLogin,
-               decoration: const InputDecoration(
-                labelText:"Login",
-                border: OutlineInputBorder(),
+              const SizedBox(height: 15),
+              //First Row - Encapsulated as a component
+              InputItemRow(
+                controller_01: _controllerName,
+                callback: () async {
+                    addItem(
+                      null,
+                      _controllerName.text.trim()
+                    );
+                    //Clear the TextFields
+                    clearTextFields();
+                  }),
+              const SizedBox(height: 15),
+              //List View - Encapsulated as a component
+              Expanded(
+                child: MyListView(list: items, onLongPressItem: (index) => removeItem(index))
               ),
-            ),
-            TextField(controller: _controllerPasswd,
-              obscureText: true,
-              obscuringCharacter: "*",
-              decoration: const InputDecoration(
-                labelText:"Password",
-                border: OutlineInputBorder(),
-              ),
-            ),
-            ElevatedButton(
-                style:ElevatedButton.styleFrom(
-                  textStyle: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold
-                  ),
-                  minimumSize: const Size(100,60),
-                  foregroundColor: Colors.blue
-                ),onPressed: buttonClicked,
-                child: const Text("Login")
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-                child: Image.asset(imagePath,width: 300, height: 300))
-              //child: Image.network(imageUrl,width: 300, height: 300))
           ],
         ),
       )
     );
   }
 
-  //this runs when you click the button
-  void buttonClicked(){
-    var input = _controllerPasswd.value.text;
-    if (input == "QWERTY123"){
-      setState(() {
-        // remote
-        // imageUrl = "https://cdn-icons-png.flaticon.com/512/566/566461.png";
-        // local
-        imagePath = "./images/idea.png";
-      });
-    }
-    else{
-      setState(() {
-        // remote
-        // imageUrl = "https://cdn-icons-png.flaticon.com/512/3477/3477145.png";
-        // local
-        imagePath = "./images/stop.png";
-      });
-    }
+  Future<AppDatabase> initDatabase() async {
+    return await $FloorAppDatabase.databaseBuilder('week8lab_database.db').build();
+  }
+
+  Future<void> addItem(int? itemId, String itemName) async {
+    await database.itemDao.insertItem(ToDoItem(itemId, itemName));
+    updateListView();
+  }
+
+  void updateListView() async {
+    //fetch updated item list from the database
+    final fetchedItems = await database.itemDao.findAllItems();
+    setState(() {
+      //re-render the item list
+      items = fetchedItems;
+    });
+  }
+
+  void clearTextFields(){
+    _controllerName.text = "";
+  }
+
+  void removeItem(int index){
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Delete Item', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+        content: const Text('Remove this item?', style: TextStyle(fontSize: 18),textAlign: TextAlign.center),
+        actions: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              //Yes
+              TextButton(
+                onPressed: () async {
+                  Navigator.pop(context, '');
+                  //delete item
+                  await database.itemDao.deleteItem(items[index]);
+                  updateListView();
+                },
+                child: const Text('Yes'),
+              ),
+              //No
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context, '');
+                },
+                child: const Text('No'),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
   }
 }
