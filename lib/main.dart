@@ -59,16 +59,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   late TextEditingController _controllerName; //late - Constructor in initState()
   late final AppDatabase database;
   List<ToDoItem> items = [];
+
 
   @override //same as in java
   initState() {
     super.initState(); //call the parent initState()
     _controllerName = TextEditingController(); //our late constructor
     _initAsync();
+
   }
 
   Future<void> _initAsync() async {
