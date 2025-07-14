@@ -5,9 +5,10 @@ class ToDoItem {
   @PrimaryKey(autoGenerate: true)
   final int? id;
   String name;
+  int quantity;
 
   // Constructor
-  ToDoItem(this.id, this.name);
+  ToDoItem(this.id, this.name, this.quantity);
 
   @override
   String toString(){

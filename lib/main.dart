@@ -59,7 +59,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late TextEditingController _controllerName; //late - Constructor in initState()
+  late TextEditingController _controllerName;
+  late TextEditingController _controllerQuantity;
   late final AppDatabase database;
   List<ToDoItem> items = [];
 
@@ -68,6 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
   initState() {
     super.initState(); //call the parent initState()
     _controllerName = TextEditingController(); //our late constructor
+    _controllerQuantity = TextEditingController(); //our late constructor
     _initAsync();
 
   }
@@ -115,7 +117,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 callback: () async {
                     addItem(
                       null,
-                      _controllerName.text.trim()
+                      _controllerName.text.trim(),
+                      int.parse(_controllerQuantity.text.trim()
+                      )
                     );
                     //Clear the TextFields
                     clearTextFields();
@@ -135,8 +139,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return await $FloorAppDatabase.databaseBuilder('week8lab_database.db').build();
   }
 
-  Future<void> addItem(int? itemId, String itemName) async {
-    await database.itemDao.insertItem(ToDoItem(itemId, itemName));
+  Future<void> addItem(int? itemId, String itemName, int quantity) async {
+    await database.itemDao.insertItem(ToDoItem(itemId, itemName, quantity));
     updateListView();
   }
 
