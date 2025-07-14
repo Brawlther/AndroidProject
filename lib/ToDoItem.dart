@@ -12,6 +12,6 @@ class ToDoItem {
 
   @override
   String toString(){
-    return name;
+    return "database id: $id || name: $name || quantity: $quantity";
   }
 }

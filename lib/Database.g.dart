@@ -151,6 +151,14 @@ class _$DAO_ToDoItem extends DAO_ToDoItem {
   }
 
   @override
+  Future<ToDoItem?> findItemById(int id) async {
+    return _queryAdapter.query('SELECT * FROM ToDoItem WHERE id = ?1',
+        mapper: (Map<String, Object?> row) => ToDoItem(
+            row['id'] as int?, row['name'] as String, row['quantity'] as int),
+        arguments: [id]);
+  }
+
+  @override
   Future<void> insertItem(ToDoItem item) async {
     await _toDoItemInsertionAdapter.insert(item, OnConflictStrategy.abort);
   }

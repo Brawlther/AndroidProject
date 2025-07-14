@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:my_cst2335_labs/ItemDetail.dart';
 import 'Database.dart';
-import 'InputItemRow.dart';
+import 'InputItemColumn.dart';
 import 'ToDoItem.dart';
 import 'MyListView.dart';
 
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Reactive Page Demo'),
     );
   }
 }
@@ -63,6 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
   late TextEditingController _controllerQuantity;
   late final AppDatabase database;
   List<ToDoItem> items = [];
+  ToDoItem? selectedItem;
 
 
   @override //same as in java
@@ -95,31 +97,32 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
+        appBar: AppBar(
+          // TRY THIS: Try changing the color here to a specific color (to
+          // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
+          // change color while the other colors stay the same.
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          // Here we take the value from the MyHomePage object that was created by
+          // the App.build method, and use it to set our appbar title.
+          title: Text(widget.title),
+        ),
+        body: Center(
+          // Center is a layout widget. It takes a single child and positions it
+          // in the middle of the parent.
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
               const SizedBox(height: 15),
               //First Row - Encapsulated as a component
-              InputItemRow(
-                controller_01: _controllerName,
-                callback: () async {
+              InputItemColumn(
+                  controller_01: _controllerName,
+                  controller_02: _controllerQuantity,
+                  callback: () async {
                     addItem(
-                      null,
-                      _controllerName.text.trim(),
-                      int.parse(_controllerQuantity.text.trim()
-                      )
+                        null,
+                        _controllerName.text.trim(),
+                        int.parse(_controllerQuantity.text.trim()
+                        )
                     );
                     //Clear the TextFields
                     clearTextFields();
@@ -127,11 +130,26 @@ class _MyHomePageState extends State<MyHomePage> {
               const SizedBox(height: 15),
               //List View - Encapsulated as a component
               Expanded(
-                child: MyListView(list: items, onLongPressItem: (index) => removeItem(index))
+                child: selectedItem == null ? MyListView(
+                  list: items,
+                  onTap: (item) => showItemDetail(item.id!),
+                ) : ItemDetail(
+                  item: selectedItem!,
+                  callback1: () {
+                    final item = selectedItem;
+                    if (item != null) {
+                      removeItem(item);
+                    }
+                    setState((){selectedItem = null;});
+                  },
+                  callback2: () {
+                    setState((){selectedItem = null;});
+                  },
+                ),
               ),
-          ],
-        ),
-      )
+            ],
+          ),
+        )
     );
   }
 
@@ -147,7 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void updateListView() async {
     //fetch updated item list from the database
     database.itemDao.findAllItems().then(
-        (fetchedItems){
+            (fetchedItems){
           setState(() {
             //re-render the item list
             items = fetchedItems;
@@ -158,9 +176,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void clearTextFields(){
     _controllerName.text = "";
+    _controllerQuantity.text = "";
   }
 
-  void removeItem(int index){
+  void showItemDetail(int id) async{
+     ToDoItem? item = await database.itemDao.findItemById(id);
+     setState((){selectedItem = item;});
+  }
+
+  void removeItem(ToDoItem item){
     showDialog<String>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
@@ -175,7 +199,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () async {
                   Navigator.pop(context, '');
                   //delete item
-                  await database.itemDao.deleteItem(items[index]);
+                  await database.itemDao.deleteItem(item);
                   updateListView();
                 },
                 child: const Text('Yes'),

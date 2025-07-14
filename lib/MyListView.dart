@@ -1,13 +1,13 @@
 import 'package:flutter/widgets.dart';
 
-class MyListView<T> extends StatelessWidget{
+class MyListView<T> extends StatelessWidget {
   final List<T> list;
-  final void Function(int index) onLongPressItem;
+  final void Function(T item) onTap;
 
   const MyListView({
     super.key,
     required this.list,
-    required this.onLongPressItem
+    required this.onTap,
   });
 
   @override
@@ -17,13 +17,13 @@ class MyListView<T> extends StatelessWidget{
       itemBuilder: (context, index) {
         final item = list[index];
         return Center(
-            child: GestureDetector(
-              onLongPress: () => {onLongPressItem(index)},
-              child: Text(
-                "${index + 1}: $item",
-                style: const TextStyle(fontSize: 18),
-              ),
-            )
+          child: GestureDetector(
+            onTap: () => onTap(item),
+            child: Text(
+              "$item",
+              style: const TextStyle(fontSize: 18)
+            ),
+          ),
         );
       },
     );
