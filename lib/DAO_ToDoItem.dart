@@ -11,4 +11,7 @@ abstract class DAO_ToDoItem {
 
   @delete
   Future<void> deleteItem(ToDoItem item);
+
+  @Query('SELECT * FROM ToDoItem WHERE id = :id')
+  Future<ToDoItem?> findItemById(int id);
 }

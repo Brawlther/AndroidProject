@@ -1,4 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
+
 part of 'Database.dart';
 
 // **************************************************************************
@@ -95,7 +96,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `ToDoItem` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, PRIMARY KEY (`id`))');
+            'CREATE TABLE IF NOT EXISTS `ToDoItem` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `name` TEXT NOT NULL, `quantity` INTEGER NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -117,14 +118,20 @@ class _$DAO_ToDoItem extends DAO_ToDoItem {
         _toDoItemInsertionAdapter = InsertionAdapter(
             database,
             'ToDoItem',
-            (ToDoItem item) =>
-                <String, Object?>{'id': item.id, 'name': item.name}),
+            (ToDoItem item) => <String, Object?>{
+                  'id': item.id,
+                  'name': item.name,
+                  'quantity': item.quantity
+                }),
         _toDoItemDeletionAdapter = DeletionAdapter(
             database,
             'ToDoItem',
             ['id'],
-            (ToDoItem item) =>
-                <String, Object?>{'id': item.id, 'name': item.name});
+            (ToDoItem item) => <String, Object?>{
+                  'id': item.id,
+                  'name': item.name,
+                  'quantity': item.quantity
+                });
 
   final sqflite.DatabaseExecutor database;
 
@@ -139,8 +146,16 @@ class _$DAO_ToDoItem extends DAO_ToDoItem {
   @override
   Future<List<ToDoItem>> findAllItems() async {
     return _queryAdapter.queryList('SELECT * FROM ToDoItem',
-        mapper: (Map<String, Object?> row) =>
-            ToDoItem(row['id'] as int, row['name'] as String));
+        mapper: (Map<String, Object?> row) => ToDoItem(
+            row['id'] as int?, row['name'] as String, row['quantity'] as int));
+  }
+
+  @override
+  Future<ToDoItem?> findItemById(int id) async {
+    return _queryAdapter.query('SELECT * FROM ToDoItem WHERE id = ?1',
+        mapper: (Map<String, Object?> row) => ToDoItem(
+            row['id'] as int?, row['name'] as String, row['quantity'] as int),
+        arguments: [id]);
   }
 
   @override
