@@ -85,61 +85,55 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           const SizedBox(height: 40),
           Expanded(
-            child: isLandScape(context) ?
-                Row(
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: ListPage(
-                          items: items,
-                          onSelectItem: (item) {
-                            showItemDetail(item.id!);
-                          })
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: DetailsPage(
-                        selectedItem: selectedItem,
-                        onDelete:(){
-                          removeItemById(selectedItem!.id!);
-                          setState(() {
-                            selectedItem = null;
-                          });
-                        },
-                        onClose: (){
-                          setState(() {
-                            selectedItem = null;
-                          });
-                        },
-                      )
-                    )
-                  ],
-                )
-                :
-            Expanded(
-                child: selectedItem == null ?
-                ListPage(
+            child: isLandScape(context)
+                ? Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: ListPage(
                     items: items,
-                    onSelectItem: (item) {
-                  showItemDetail(item.id!);
-                })
-                    :
-                DetailsPage(
-                  selectedItem: selectedItem,
-                  onDelete:(){
-                    removeItemById(selectedItem!.id!);
-                    setState(() {
-                      selectedItem = null;
-                    });
-                  },
-                  onClose: (){
-                    setState(() {
-                      selectedItem = null;
-                    });
-                  },
-                )
+                    onSelectItem: (item) => showItemDetail(item.id!),
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: DetailsPage(
+                    selectedItem: selectedItem,
+                    onDelete: () {
+                      removeItemById(selectedItem!.id!);
+                      setState(() {
+                        selectedItem = null;
+                      });
+                    },
+                    onClose: () {
+                      setState(() {
+                        selectedItem = null;
+                      });
+                    },
+                  ),
+                ),
+              ],
             )
-          )
+                : (selectedItem == null
+                ? ListPage(
+              items: items,
+              onSelectItem: (item) => showItemDetail(item.id!),
+            )
+                : DetailsPage(
+              selectedItem: selectedItem,
+              onDelete: () {
+                removeItemById(selectedItem!.id!);
+                setState(() {
+                  selectedItem = null;
+                });
+              },
+              onClose: () {
+                setState(() {
+                  selectedItem = null;
+                });
+              },
+            )),
+          ),
         ],
       ),
     );
