@@ -14,4 +14,8 @@ class ToDoItem {
   String toString(){
     return "database id: $id || name: $name || quantity: $quantity";
   }
+
+  String toItemName(){
+    return name;
+  }
 }

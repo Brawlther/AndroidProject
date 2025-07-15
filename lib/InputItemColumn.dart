@@ -20,7 +20,7 @@ class InputItemColumn extends StatelessWidget{
         TextField(
           controller: controller_01,
           decoration: const InputDecoration(
-            hintText: "Type the item here",
+            hintText: "Type the name here",
             labelText: "Item Name",
             border: OutlineInputBorder(),
           ),

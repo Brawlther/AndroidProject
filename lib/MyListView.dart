@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
+import 'package:my_cst2335_labs/ToDoItem.dart';
 
-class MyListView<T> extends StatelessWidget {
+class MyListView<T extends ToDoItem> extends StatelessWidget {
   final List<T> list;
   final void Function(T item) onTap;
 
@@ -20,7 +21,7 @@ class MyListView<T> extends StatelessWidget {
           child: GestureDetector(
             onTap: () => onTap(item),
             child: Text(
-              "$item",
+              item.toItemName(),
               style: const TextStyle(fontSize: 18)
             ),
           ),
